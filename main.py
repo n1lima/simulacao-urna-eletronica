@@ -1,110 +1,144 @@
+import tkinter as tk
+from tkinter import messagebox
 import pickle
-import traceback
-import gerenciar_urna
-from common import *
-from tkinter import *
+from common import Eleitor, Candidato
+from eleicao import Urna
+import os
 
 FILE_ELEITORES = 'eleitores.pkl'
 FILE_CANDIDATOS = 'candidatos.pkl'
 
-def menu(opcao):
-    opcoes = {
-        1: "1-Novo Eleitor",
-        2: "2-Atualizar Eleitor",
-        3: "3-Inserir Candidato",
-        4: "4-Listar Candidatos",
-        5: "5-Iniciar Urna",
-        6: "6-Testar Urna",
-        7: "7-Emitir Zeresima",
-        8: "8-Finalizar"
-    }
-    print(opcoes.get(opcao, "Opção inválida"))
+def carregar_eleitores():
+    try:
+        with open(FILE_ELEITORES, 'rb') as arquivo:
+            return pickle.load(arquivo)
+    except FileNotFoundError:
+        return {}
 
-def inserir_eleitor(eleitores):
-    titulo = int(input("Digite o Títlulo: "))
-
-    if titulo in eleitores:
-        raise Exception("Titulo já existente!")
-
-    nome = input("Digite o nome: ")
-    RG = input("Digite o RG: ")
-    CPF = input("Digite o CPF: ")
-    secao = int(input("Digite a secao: "))
-    zona = int(input("Digite a zona: "))
-
-    eleitor = Eleitor(nome, RG, CPF, titulo, secao, zona)
-    eleitores[eleitor.get_titulo()] = eleitor
-
+def salvar_eleitores(eleitores):
     with open(FILE_ELEITORES, 'wb') as arquivo:
         pickle.dump(eleitores, arquivo)
 
-    print('Eleitor gravado com sucesso!')
-    print(eleitor)
+def carregar_candidatos():
+    try:
+        with open(FILE_CANDIDATOS, 'rb') as arquivo:
+            return pickle.load(arquivo)
+    except FileNotFoundError:
+        return {}
 
-def atualizar_eleitor(eleitores):
-    titulo = int(input('Digite o titulo do eleitor: '))
+eleitores = carregar_eleitores()
+candidatos = carregar_candidatos()
 
-    if titulo in eleitores:
-        eleitor = eleitores[titulo]
-        print(eleitor)
-        secao = int(input("Digite a nova secao: "))
-        zona = int(input("Digite a nova zona: "))
-        eleitor.secao = secao
-        eleitor.zona = zona
+def abrir_urna(eleitor):
+    def votar():
+        voto = entrada_voto.get()  
+        if voto.isdigit(): 
+            numero = int(voto)
+            
+            if numero == 0:
+                messagebox.showinfo("Sucesso", "Voto registrado como BRANCO")
+            elif numero in candidatos:
+                candidatos[numero].votos += 1  
+                salvar_candidatos(candidatos)  
+                messagebox.showinfo("Sucesso", f"Voto registrado para o candidato: {candidatos[numero].__str__()}")
+            else:
+                messagebox.showinfo("Sucesso", "Voto registrado como NULO")
+        else:
+            messagebox.showwarning("Erro", "Digite um número válido.")
+        
+        entrada_voto.delete(0, tk.END)  
+  
+    urna_window = tk.Toplevel()
+    urna_window.title("Urna Eletrônica")
+    
+    tk.Label(urna_window, text=f"Bem-vindo, {eleitor.__str__()}", justify="left").pack(pady=10)
+    tk.Label(urna_window, text="Digite o número do candidato ou 0 para Branco:").pack(pady=5)
+    entrada_voto = tk.Entry(urna_window)
+    entrada_voto.pack(pady=5)
+    
+    tk.Button(urna_window, text="Votar", command=votar).pack(pady=10)
 
-        with open(FILE_ELEITORES, 'wb') as arquivo:
-            pickle.dump(eleitores, arquivo)
-
-        print('Atualizados dados do eleitor!')
-        print(eleitor)
-    else:
-        raise Exception('Titulo inexistente')
-
-def inserir_candidato(candidatos):
-    numero = int(input("Digite o número do candidato: "))
-
-    if numero in candidatos:
-        raise Exception("Candidato já existente!")
-
-    nome = input("Digite o nome: ")
-    RG = input("Digite o RG: ")
-    CPF = input("Digite o CPF: ")
-
-    candidato = Candidato(nome, RG, CPF, numero)
-    candidatos[candidato.get_numero()] = candidato
-
-    with open(FILE_CANDIDATOS, 'wb') as arquivo:
+def salvar_candidatos(candidatos):
+    with open("candidatos.pkl", "wb") as arquivo:
         pickle.dump(candidatos, arquivo)
 
-    print('Candidato gravado com sucesso!')
-    print(candidato)
+def carregar_eleitores():
+    if os.path.exists("eleitores.pkl"):
+        with open("eleitores.pkl", "rb") as arquivo:
+            return pickle.load(arquivo)
+    else:
+        return {}
 
-def listar_candidatos(candidatos):
-    for candidato in candidatos.values():
-        print(candidato)
+def salvar_eleitores(eleitores):
+    with open("eleitores.pkl", "wb") as arquivo:
+        pickle.dump(eleitores, arquivo)
 
-janela = Tk()
-janela.title('Urna Eletrônica')
-janela.geometry("300x400")
+def registrar_eleitor(titulo):
+    def salvar():
+        nome = entrada_nome.get()
+        rg = entrada_rg.get()
+        cpf = entrada_cpf.get()
+        secao = entrada_secao.get()
+        zona = entrada_zona.get()
 
-# Adicionando o texto de boas-vindas
-texto_bem_vindo = Label(janela, text="Bem-vindo à Urna Eletrônica", font=("Arial", 14), pady=10)
-texto_bem_vindo.pack()
+        if nome and rg and cpf and secao and zona:
+            eleitor = Eleitor(nome, rg, cpf, titulo, secao, zona)
+            eleitores[titulo] = eleitor
+            salvar_eleitores(eleitores)
+    
+            messagebox.showinfo("Sucesso", f"Eleitor {nome} registrado com sucesso!")
+            janela_registro.destroy()
+        else:
+            messagebox.showwarning("Erro", "Todos os campos devem ser preenchidos.")
 
-# Adicionando os botões do menu
-botoes = [
-    ("Novo Eleitor", 1),
-    ("Atualizar Eleitor", 2),
-    ("Inserir Candidato", 3),
-    ("Listar Candidatos", 4),
-    ("Iniciar Urna", 5),
-    ("Testar Urna", 6),
-    ("Emitir Zeresima", 7),
-    ("Finalizar", 8)
-]
+    janela_registro = tk.Toplevel()
+    janela_registro.title("Registrar Novo Eleitor")
+    
+    tk.Label(janela_registro, text=f"Título de Eleitor: {titulo}").pack(pady=5)
+    
+    tk.Label(janela_registro, text="Nome do Eleitor:").pack(pady=5)
+    entrada_nome = tk.Entry(janela_registro)
+    entrada_nome.pack(pady=5)
 
-for texto, opcao in botoes:
-    botao = Button(janela, text=texto, command=lambda op=opcao: menu(op), width=20)
-    botao.pack(pady=5)
+    tk.Label(janela_registro, text="RG do Eleitor:").pack(pady=5)
+    entrada_rg = tk.Entry(janela_registro)
+    entrada_rg.pack(pady=5)
 
-janela.mainloop()
+    tk.Label(janela_registro, text="CPF do Eleitor:").pack(pady=5)
+    entrada_cpf = tk.Entry(janela_registro)
+    entrada_cpf.pack(pady=5)
+
+    tk.Label(janela_registro, text="Seção Eleitoral:").pack(pady=5)
+    entrada_secao = tk.Entry(janela_registro)
+    entrada_secao.pack(pady=5)
+
+    tk.Label(janela_registro, text="Zona Eleitoral:").pack(pady=5)
+    entrada_zona = tk.Entry(janela_registro)
+    entrada_zona.pack(pady=5)
+
+    tk.Button(janela_registro, text="Registrar", command=salvar).pack(pady=10)
+
+def verificar_titulo():
+    titulo = entrada_titulo.get()
+    if titulo.isdigit():
+        titulo = int(titulo)
+        if titulo in eleitores:
+            eleitor = eleitores[titulo]
+            abrir_urna(eleitor)
+        else:
+            resposta = messagebox.askyesno("Título não encontrado", "Título não encontrado. Deseja registrar um novo eleitor?")
+            if resposta:
+                registrar_eleitor(titulo)
+    else:
+        messagebox.showwarning("Erro", "Digite um título válido.")
+
+root = tk.Tk()
+root.title("Urna Eletrônica - Verificação de Título")
+
+tk.Label(root, text="Digite o título de eleitor:").pack(pady=10)
+entrada_titulo = tk.Entry(root)
+entrada_titulo.pack(pady=5)
+
+tk.Button(root, text="Verificar", command=verificar_titulo).pack(pady=10)
+
+root.mainloop()
