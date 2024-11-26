@@ -28,20 +28,6 @@ Este projeto consiste no desenvolvimento de uma interface gráfica (GUI) simulan
   - `pickle` (para manipulação de arquivos `.pkl`)
   - `csv` (para leitura e escrita de arquivos `.csv`)
 
-## Estrutura do Projeto
-
-.
-├── data/                 
-│   ├── eleitores.pkl      # Dados de eleitores cadastrados
-│   ├── candidatos.pkl     # Dados de candidatos
-│   ├── votos.pkl          # Registro de votos computados
-├── main.py                # Arquivo principal da aplicação
-├── utils/                 
-│   ├── leitor_csv.py      # Funções para manipulação de arquivos CSV
-│   ├── manipulador_dados.py # Funções para manipulação de dados em .pkl
-└── README.md              # Documentação do projeto
-
-
 ## Como Executar
 
 1. **Instale o Python 3.x**
@@ -49,29 +35,28 @@ Este projeto consiste no desenvolvimento de uma interface gráfica (GUI) simulan
    - Caso não esteja, baixe-o [aqui](https://www.python.org/downloads/).
 
 2. **Clone o Repositório**
+   - Clone o repositório com o comando:
+     ```bash
+     git clone https://github.com/usuario/simulacao-urna-eletronica.git
+     cd simulacao-urna-eletronica
+    ```
 
-   git clone https://github.com/usuario/simulacao-urna-eletronica.git
-   cd simulacao-urna-eletronica
-
-3. **Prepare os Arquivos de Dados**
-   - Adicione os arquivos `.pkl` ou `.csv` contendo os eleitores e candidatos na pasta `data/`.
+3. **Checkout na Branch Nova**
+   - Após clonar o repositório, mude para a branch `nova-branch` com o comando:
+     ```bash
+     git checkout nova-branch
+     ```
 
 4. **Execute a Aplicação**
-  
-   python main.py
-
-## Após a Execução
-
-- **Tela Inicial:** Ao iniciar o programa, será solicitado o número do título do eleitor. O sistema irá validar o eleitor e mostrar os dados na tela.
-- **Votação:** Após a validação, o eleitor pode votar digitando o número do candidato ou optar por votar em branco ou inválido.
-- **Armazenamento:** O voto será computado e armazenado no arquivo `.pkl`. O programa então retornará à tela inicial para que outro eleitor possa registrar seu voto.
-- **Repetição:** O sistema continuará esse ciclo até que a aplicação seja encerrada.
+   - Execute o programa com o seguinte comando:
+     ```bash
+     python main.py
+     ```
 
 ## Contribuidores
 
-- Nicoly Lima - [nicoly.lima@unisantos.br](mailto:nicoly.lima@unisantos.br)
-- Daniel Quintela - [danielquintelamuniz@unisantos.br](mailto:danielquintelamuniz@unisantos.br)
 - Fernanda Meireles - [fernanda.meireles@unisantos.br](mailto:fernanda.meireles@unisantos.br)
+- Nicoly Lima - [nicoly.lima@unisantos.br](mailto:nicoly.lima@unisantos.br)
 - Rafaela Santana - [rafaela.santana@unisantos.br](mailto:rafaela.santana@unisantos.br)
 
 ## Observações
