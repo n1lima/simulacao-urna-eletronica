@@ -30,9 +30,8 @@ Este projeto consiste no desenvolvimento de uma interface gráfica (GUI) simulan
 
 ## Contribuidores
 
-- Nicoly Lima - [nicoly.lima@unisantos.br](mailto:nicoly.lima@unisantos.br)
-- Daniel Quintela - [danielquintelamuniz@unisantos.br](mailto:danielquintelamuniz@unisantos.br)
 - Fernanda Meireles - [fernanda.meireles@unisantos.br](mailto:fernanda.meireles@unisantos.br)
+- Nicoly Lima - [nicoly.lima@unisantos.br](mailto:nicoly.lima@unisantos.br)
 - Rafaela Santana - [rafaela.santana@unisantos.br](mailto:rafaela.santana@unisantos.br)
 
 ## Observações
