@@ -1,66 +1,94 @@
 import tkinter as tk
 from tkinter import messagebox
 import pickle
-from common import Eleitor, Candidato
-from eleicao import Urna
+from common import *
+from eleicao import *
 import os
 
 FILE_ELEITORES = 'eleitores.pkl'
 FILE_CANDIDATOS = 'candidatos.pkl'
+FILE_VOTOS = 'votos.pkl'
 
-def carregar_eleitores():
-    try:
-        with open(FILE_ELEITORES, 'rb') as arquivo:
+# Funções para carregar e salvar dados em arquivos
+def carregar_dados(nome_arquivo):
+    if os.path.exists(nome_arquivo):
+        with open(nome_arquivo, 'rb') as arquivo:
             return pickle.load(arquivo)
-    except FileNotFoundError:
-        return {}
+    return {}
 
-def salvar_eleitores(eleitores):
-    with open(FILE_ELEITORES, 'wb') as arquivo:
-        pickle.dump(eleitores, arquivo)
+def salvar_dados(nome_arquivo, dados):
+    with open(nome_arquivo, 'wb') as arquivo:
+        pickle.dump(dados, arquivo)
 
-def carregar_candidatos():
-    try:
-        with open(FILE_CANDIDATOS, 'rb') as arquivo:
-            return pickle.load(arquivo)
-    except FileNotFoundError:
-        return {}
+eleitores = carregar_dados(FILE_ELEITORES)
+candidatos = carregar_dados(FILE_CANDIDATOS)
+votos = carregar_dados(FILE_VOTOS)
 
-eleitores = carregar_eleitores()
-candidatos = carregar_candidatos()
+# Função para adicionar candidatos
+def adicionar_candidato():
+    def salvar_candidato():
+        numero = entrada_numero.get()
+        nome = entrada_nome.get()
 
+        if numero.isdigit() and nome:
+            numero = int(numero)
+            if numero in candidatos:
+                messagebox.showwarning("Erro", "Número do candidato já existe.")
+            else:
+                candidatos[numero] = {'nome': nome, 'votos': 0}
+                salvar_dados(FILE_CANDIDATOS, candidatos)
+                messagebox.showinfo("Sucesso", f"Candidato {nome} adicionado com sucesso!")
+                janela_adicionar.destroy()
+        else:
+            messagebox.showwarning("Erro", "Preencha todos os campos corretamente.")
+
+    # Janela para registrar novo candidato
+    janela_adicionar = tk.Toplevel()
+    janela_adicionar.title("Adicionar Candidato")
+    
+    tk.Label(janela_adicionar, text="Número do Candidato:").pack(pady=5)
+    entrada_numero = tk.Entry(janela_adicionar)
+    entrada_numero.pack(pady=5)
+
+    tk.Label(janela_adicionar, text="Nome do Candidato:").pack(pady=5)
+    entrada_nome = tk.Entry(janela_adicionar)
+    entrada_nome.pack(pady=5)
+
+    tk.Button(janela_adicionar, text="Salvar", command=salvar_candidato).pack(pady=10)
+
+# função para abrir urna e registrar votos
 def abrir_urna(eleitor):
     def votar():
-        voto = entrada_voto.get()  
-        if voto.isdigit(): 
+        voto = entrada_voto.get()
+        if voto.isdigit():
             numero = int(voto)
             
-            if numero == 0:
+            if numero == 0:  # Voto branco
+                votos['branco'] = votos.get('branco', 0) + 1
+                salvar_dados(FILE_VOTOS, votos)
                 messagebox.showinfo("Sucesso", "Voto registrado como BRANCO")
-            elif numero in candidatos:
-                candidatos[numero].votos += 1  
-                salvar_candidatos(candidatos)  
-                messagebox.showinfo("Sucesso", f"Voto registrado para o candidato: {candidatos[numero].__str__()}")
-            else:
+            elif numero in candidatos:  # Voto válido
+                candidatos[numero]['votos'] += 1
+                salvar_dados(FILE_CANDIDATOS, candidatos)
+                messagebox.showinfo("Sucesso", f"Voto registrado para: {candidatos[numero]['nome']}")
+            else:  # Voto nulo
+                votos['nulo'] = votos.get('nulo', 0) + 1
+                salvar_dados(FILE_VOTOS, votos)
                 messagebox.showinfo("Sucesso", "Voto registrado como NULO")
         else:
             messagebox.showwarning("Erro", "Digite um número válido.")
         
-        entrada_voto.delete(0, tk.END)  
-  
+        urna_window.destroy()  # Fechar janela após votar
+
     urna_window = tk.Toplevel()
     urna_window.title("Urna Eletrônica")
     
-    tk.Label(urna_window, text=f"Bem-vindo, {eleitor.__str__()}", justify="left").pack(pady=10)
+    tk.Label(urna_window, text=f"Bem-vindo, {eleitor.nome}!").pack(pady=10)
     tk.Label(urna_window, text="Digite o número do candidato ou 0 para Branco:").pack(pady=5)
     entrada_voto = tk.Entry(urna_window)
     entrada_voto.pack(pady=5)
     
     tk.Button(urna_window, text="Votar", command=votar).pack(pady=10)
-
-def salvar_candidatos(candidatos):
-    with open("candidatos.pkl", "wb") as arquivo:
-        pickle.dump(candidatos, arquivo)
 
 def carregar_eleitores():
     if os.path.exists("eleitores.pkl"):
@@ -134,11 +162,14 @@ def verificar_titulo():
 
 root = tk.Tk()
 root.title("Urna Eletrônica - Verificação de Título")
+root.geometry("300x300")
 
 tk.Label(root, text="Digite o título de eleitor:").pack(pady=10)
 entrada_titulo = tk.Entry(root)
 entrada_titulo.pack(pady=5)
 
 tk.Button(root, text="Verificar", command=verificar_titulo).pack(pady=10)
+tk.Button(root, text="Adicionar Candidato", command=adicionar_candidato).pack(pady=10)
+
 
 root.mainloop()

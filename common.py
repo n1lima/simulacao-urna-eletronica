@@ -1,21 +1,21 @@
 class Pessoa:
-    __nome : str
+    nome : str
     __RG : str
     __CPF : str
 
     def __init__(self, nome, RG, CPF):
-        self.__nome = nome
+        self.nome = nome
         self.__RG = RG
         self.__CPF = CPF
 
     def __str__(self):
-        info = (f'Nome: {self.__nome}\n'
+        info = (f'Nome: {self.nome}\n'
                f'RG: {self.__RG}\n'
                f'CPF: {self.__CPF}\n')
         return info
 
     def __repr__(self):
-        return f"Pessoa(nome='{self.__nome}', RG='{self.__RG}', CPF='{self.__CPF}')"
+        return f"Pessoa(nome='{self.nome}', RG='{self.__RG}', CPF='{self.__CPF}')"
 
 class Eleitor(Pessoa):
     __titulo : int
