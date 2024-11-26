@@ -38,7 +38,6 @@ Este projeto consiste no desenvolvimento de uma interface gráfica (GUI) simulan
    - Clone o repositório com o comando:
      ```bash
      git clone https://github.com/usuario/simulacao-urna-eletronica.git
-     cd simulacao-urna-eletronica
     ```
 
 3. **Checkout na Branch Nova**
