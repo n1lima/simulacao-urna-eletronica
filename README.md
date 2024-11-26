@@ -28,20 +28,6 @@ Este projeto consiste no desenvolvimento de uma interface gráfica (GUI) simulan
   - `pickle` (para manipulação de arquivos `.pkl`)
   - `csv` (para leitura e escrita de arquivos `.csv`)
 
-## Estrutura do Projeto
-
-.
-├── data/                 
-│   ├── eleitores.pkl      # Dados de eleitores cadastrados
-│   ├── candidatos.pkl     # Dados de candidatos
-│   ├── votos.pkl          # Registro de votos computados
-├── main.py                # Arquivo principal da aplicação
-├── utils/                 
-│   ├── leitor_csv.py      # Funções para manipulação de arquivos CSV
-│   ├── manipulador_dados.py # Funções para manipulação de dados em .pkl
-└── README.md              # Documentação do projeto
-
-
 ## Como Executar
 
 1. **Instale o Python 3.x**
