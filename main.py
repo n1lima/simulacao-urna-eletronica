@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import pickle
-from common import Eleitor, Candidato
-from eleicao import Urna
+from common import *
+from eleicao import *
 import os
 
 FILE_ELEITORES = 'eleitores.pkl'
