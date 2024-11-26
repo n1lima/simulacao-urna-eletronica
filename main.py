@@ -5,31 +5,6 @@ from common import Eleitor, Candidato
 from eleicao import Urna
 import os
 
-'''FILE_ELEITORES = 'eleitores.pkl'
-FILE_CANDIDATOS = 'candidatos.pkl'
-
-def carregar_eleitores():
-    try:
-        with open(FILE_ELEITORES, 'rb') as arquivo:
-            return pickle.load(arquivo)
-    except FileNotFoundError:
-        return {}
-
-def salvar_eleitores(eleitores):
-    with open(FILE_ELEITORES, 'wb') as arquivo:
-        pickle.dump(eleitores, arquivo)
-
-def carregar_candidatos():
-    try:
-        with open(FILE_CANDIDATOS, 'rb') as arquivo:
-            return pickle.load(arquivo)
-    except FileNotFoundError:
-        return {}
-
-eleitores = carregar_eleitores()
-candidatos = carregar_candidatos()
-'''
-
 FILE_ELEITORES = 'eleitores.pkl'
 FILE_CANDIDATOS = 'candidatos.pkl'
 FILE_VOTOS = 'votos.pkl'
@@ -81,40 +56,6 @@ def adicionar_candidato():
 
     tk.Button(janela_adicionar, text="Salvar", command=salvar_candidato).pack(pady=10)
 
-'''
-def abrir_urna(eleitor):
-    def votar():
-        voto = entrada_voto.get()  
-        if voto.isdigit(): 
-            numero = int(voto)
-            
-            if numero == 0:
-                messagebox.showinfo("Sucesso", "Voto registrado como BRANCO")
-            elif numero in candidatos:
-                candidatos[numero].votos += 1  
-                salvar_candidatos(candidatos)  
-                messagebox.showinfo("Sucesso", f"Voto registrado para o candidato: {candidatos[numero].__str__()}")
-            else:
-                messagebox.showinfo("Sucesso", "Voto registrado como NULO")
-        else:
-            messagebox.showwarning("Erro", "Digite um número válido.")
-        
-        entrada_voto.delete(0, tk.END)  
-  
-    urna_window = tk.Toplevel()
-    urna_window.title("Urna Eletrônica")
-    
-    tk.Label(urna_window, text=f"Bem-vindo, {eleitor.__str__()}", justify="left").pack(pady=10)
-    tk.Label(urna_window, text="Digite o número do candidato ou 0 para Branco:").pack(pady=5)
-    entrada_voto = tk.Entry(urna_window)
-    entrada_voto.pack(pady=5)
-    
-    tk.Button(urna_window, text="Votar", command=votar).pack(pady=10)
-
-def salvar_candidatos(candidatos):
-        with open("candidatos.pkl", "wb") as arquivo:
-            pickle.dump(candidatos, arquivo)
-'''
 # função para abrir urna e registrar votos
 def abrir_urna(eleitor):
     def votar():
@@ -142,7 +83,7 @@ def abrir_urna(eleitor):
     urna_window = tk.Toplevel()
     urna_window.title("Urna Eletrônica")
     
-    tk.Label(urna_window, text=f"Bem-vindo, {eleitor['nome']}!").pack(pady=10)
+    tk.Label(urna_window, text=f"Bem-vindo, {eleitor.nome}!").pack(pady=10)
     tk.Label(urna_window, text="Digite o número do candidato ou 0 para Branco:").pack(pady=5)
     entrada_voto = tk.Entry(urna_window)
     entrada_voto.pack(pady=5)
