@@ -11,5 +11,5 @@ def abrir_arquivo_pkl(nome_arquivo):
         print(f"Erro ao abrir o arquivo: {e}")
 
 # Substitua pelo caminho do arquivo .pkl que você deseja inspecionar
-#abrir_arquivo_pkl('eleitores.pkl')
+abrir_arquivo_pkl('eleitores.pkl')
 abrir_arquivo_pkl('candidatos.pkl')
