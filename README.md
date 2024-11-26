@@ -28,31 +28,6 @@ Este projeto consiste no desenvolvimento de uma interface gráfica (GUI) simulan
   - `pickle` (para manipulação de arquivos `.pkl`)
   - `csv` (para leitura e escrita de arquivos `.csv`)
 
-## Como Executar
-
-1. **Instale o Python 3.x**
-   - Verifique se o Python está instalado: `python --version`
-   - Caso não esteja, baixe-o [aqui](https://www.python.org/downloads/).
-
-2. **Clone o Repositório**
-
-   git clone https://github.com/usuario/simulacao-urna-eletronica.git
-   cd simulacao-urna-eletronica
-
-3. **Prepare os Arquivos de Dados**
-   - Adicione os arquivos `.pkl` ou `.csv` contendo os eleitores e candidatos na pasta `data/`.
-
-4. **Execute a Aplicação**
-  
-   python main.py
-
-## Após a Execução
-
-- **Tela Inicial:** Ao iniciar o programa, será solicitado o número do título do eleitor. O sistema irá validar o eleitor e mostrar os dados na tela.
-- **Votação:** Após a validação, o eleitor pode votar digitando o número do candidato ou optar por votar em branco ou inválido.
-- **Armazenamento:** O voto será computado e armazenado no arquivo `.pkl`. O programa então retornará à tela inicial para que outro eleitor possa registrar seu voto.
-- **Repetição:** O sistema continuará esse ciclo até que a aplicação seja encerrada.
-
 ## Contribuidores
 
 - Nicoly Lima - [nicoly.lima@unisantos.br](mailto:nicoly.lima@unisantos.br)
